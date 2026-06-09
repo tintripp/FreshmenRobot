@@ -49,6 +49,9 @@ void DriveSystem::setBaseSpeed(int s){
   base_speed = s;
   setSpeed(s, s);
 }
+int DriveSystem::getBaseSpeed(){
+  return base_speed;
+}
 
 void DriveSystem::backward(){
   lm.backward();

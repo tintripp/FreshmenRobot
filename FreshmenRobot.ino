@@ -15,16 +15,21 @@ void correct(){
   int rTicks = ds.getREncoder()->getTicks();
 
   int error = lTicks - rTicks;
+  
+  /*
   // more left
   if (error > 0) {}
   // more right
   if (error < 0) {}
+  */
 
-  float correction = (float)error / 2;
+  float correctionDamping = 0.1;
+  float correction = (float)error * correctionDamping;
+
   int spd = ds.getBaseSpeed();
   ds.setSpeed(
-    spd + correction 
-    spd - correction, 
+    spd + correction,
+    spd - correction 
   );
 }
 
