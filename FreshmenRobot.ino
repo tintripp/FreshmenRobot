@@ -8,26 +8,50 @@
 #define R_ENCODER_B 9
 
 DriveSystem ds;
+unsigned long startTime;
+
+void correct(){
+  int lTicks = ds.getLEncoder()->getTicks();
+  int rTicks = ds.getREncoder()->getTicks();
+
+  int error = lTicks - rTicks;
+  // more left
+  if (error > 0) {}
+  // more right
+  if (error < 0) {}
+
+  float correction = (float)error / 2;
+  int spd = ds.getBaseSpeed();
+  ds.setSpeed(
+    spd + correction 
+    spd - correction, 
+  );
+}
 
 void setup(){
   Serial.begin(115200);
 	//while (!Serial) delay(1);
+
+  startTime = millis();
+
+  Serial.println("Waiting 5 Seconds...");
+  delay(5000);
 
   ds.begin(
     L_MOTOR, R_MOTOR,
     L_ENCODER_A, L_ENCODER_B,
     R_ENCODER_A, R_ENCODER_B
   );
-
   Serial.println("Begin");
 
+  ds.setBaseSpeed(100);
+  ds.forward();
 }
 
 void loop(){
-  Serial.print("lticks: ");
-  Serial.print(ds.getLEncoder()->getTicks());
-  Serial.print("\trticks: ");
-  Serial.print(ds.getREncoder()->getTicks());
-  Serial.println();
-	delay(16);
+  // stop after 5 seconds
+  if (millis() - startTime > 5000) return;
+
+  correct();
+
 }

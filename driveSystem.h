@@ -8,6 +8,8 @@ class DriveSystem{
   private:
     Adafruit_MotorShield AFMS;
 
+    int base_speed;
+
     Motor lm;
     Motor rm;
     Encoder le;
@@ -37,10 +39,12 @@ class DriveSystem{
     Motor *getLMotor();
     Motor *getRMotor();
 
-    void setSpeed(int ls, int rs);
-    void setSpeed(int s);
+    // sets speed the drive system regulates to
+    int getBaseSpeed();
+    void setBaseSpeed(int s);
 
-    // these methods make the motors actually move
+    // this sets the physical motor's speed
+    void setSpeed(int ls, int rs);
 
     void backward();
     void turnL();

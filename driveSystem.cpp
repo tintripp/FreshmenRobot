@@ -45,7 +45,8 @@ void DriveSystem::setSpeed(int ls, int rs){
   lm.setSpeed(ls);
   rm.setSpeed(rs);
 }
-void DriveSystem::setSpeed(int s){
+void DriveSystem::setBaseSpeed(int s){
+  base_speed = s;
   setSpeed(s, s);
 }
 
