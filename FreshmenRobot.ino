@@ -1,11 +1,11 @@
 #include "driveSystem.h"
 
-#define LMOTOR 1
-#define RMOTOR 4
-#define LENC_A 6
-#define LENC_B 5
-#define RENC_A 10
-#define RENC_B 9
+#define L_MOTOR 1
+#define R_MOTOR 4
+#define L_ENCODER_A 6
+#define L_ENCODER_B 5
+#define R_ENCODER_A 10
+#define R_ENCODER_B 9
 
 DriveSystem ds;
 
@@ -14,9 +14,9 @@ void setup(){
 	//while (!Serial) delay(1);
 
   ds.begin(
-    LMOTOR, RMOTOR,
-    LENC_A, LENC_B,
-    RENC_A, RENC_B
+    L_MOTOR, R_MOTOR,
+    L_ENCODER_A, L_ENCODER_B,
+    R_ENCODER_A, R_ENCODER_B
   );
 
   Serial.println("Begin");
