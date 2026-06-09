@@ -14,6 +14,8 @@ class Encoder{
     void setReversed(bool r);
     void tick();
 
+    void resetTicks();
+
     int getTicks();
     int getDistance();
     

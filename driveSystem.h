@@ -25,6 +25,8 @@ class DriveSystem{
 
     /* Encoder Related Functions */
 
+    void resetTicks();
+
     static void lInterrupt();
     static void rInterrupt();
     Encoder *getLEncoder();

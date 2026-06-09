@@ -6,7 +6,7 @@
 Encoder::Encoder() {}
 
 void Encoder::begin(int a, int b, void (*interrupt)()){
-  ticks = 0;
+  resetTicks();
 
   pin_a = a;
   pin_b = b;
@@ -38,6 +38,11 @@ void Encoder::tick(){
 
   lastA = a;
 }
+
+void Encoder::resetTicks(){
+  ticks = 0;
+}
+
 int Encoder::getTicks(){
   noInterrupts();
   long safeTicks = ticks;
@@ -48,7 +53,6 @@ int Encoder::getTicks(){
 
   return safeTicks;
 }
-
 // just assuming millimeters.
 int Encoder::getDistance(){
   return getTicks() / TICKSPERMM;

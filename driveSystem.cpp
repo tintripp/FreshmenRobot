@@ -25,6 +25,11 @@ void DriveSystem::begin(
 
 /* Encoder Related Functions */
 
+void DriveSystem::resetTicks(){
+  le.resetTicks();
+  re.resetTicks();
+}
+
 void DriveSystem::lInterrupt() { if (instance) instance->le.tick(); }
 void DriveSystem::rInterrupt() { if (instance) instance->re.tick(); }
 
