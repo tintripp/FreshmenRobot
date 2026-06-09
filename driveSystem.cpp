@@ -2,21 +2,39 @@
 
 DriveSystem::DriveSystem() {}
 
-void DriveSystem::begin(int lport, int rport){
+DriveSystem* DriveSystem::instance = nullptr;
+
+void DriveSystem::begin(
+  int lmotor, int rmotor, 
+  int lenc_a, int lenc_b, 
+  int renc_a, int renc_b
+){
+  instance = this;
   AFMS = Adafruit_MotorShield();
 
   AFMS.begin();
-  lm.begin(AFMS, lport);
-  rm.begin(AFMS, rport);
-  //Serial.println("DriveSystem: Motors Begin");
+  lm.begin(AFMS, lmotor);
+  rm.begin(AFMS, rmotor);
+  Serial.println("DriveSystem: Motors Begin");
+
+  le.begin(lenc_a, lenc_b, lInterrupt);
+  re.begin(renc_a, renc_b, rInterrupt);
+  re.setReversed(true);
+  Serial.println("DriveSystem: Encoders Begin");
 }
 
-Motor *DriveSystem::getLMotor(){
-  return &lm;
-}
-Motor *DriveSystem::getRMotor(){
-  return &rm;
-}
+/* Encoder Related Functions */
+
+void DriveSystem::lInterrupt() { if (instance) instance->le.tick(); }
+void DriveSystem::rInterrupt() { if (instance) instance->re.tick(); }
+
+Encoder *DriveSystem::getLEncoder(){ return &le; }
+Encoder *DriveSystem::getREncoder(){ return &re; }
+
+/* Motor Related Functions */
+
+Motor *DriveSystem::getLMotor(){ return &lm; }
+Motor *DriveSystem::getRMotor(){ return &rm; }
 
 void DriveSystem::setSpeed(int ls, int rs){
   lm.setSpeed(ls);

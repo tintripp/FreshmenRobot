@@ -2,6 +2,7 @@
 
 #include <Adafruit_MotorShield.h>
 #include "motor.h"
+#include "encoder.h"
 
 class DriveSystem{
   private:
@@ -9,10 +10,27 @@ class DriveSystem{
 
     Motor lm;
     Motor rm;
+    Encoder le;
+    Encoder re;
     
   public:
     DriveSystem();
-    void begin(int lport, int rport);
+
+    void begin(
+      int lmotor, int rmotor, 
+      int lenc_a, int lenc_b, 
+      int renc_a, int renc_b
+    );
+    static DriveSystem* instance;
+
+    /* Encoder Related Functions */
+
+    static void lInterrupt();
+    static void rInterrupt();
+    Encoder *getLEncoder();
+    Encoder *getREncoder();
+
+    /* Motor Related Functions */
 
     Motor *getLMotor();
     Motor *getRMotor();
@@ -21,6 +39,7 @@ class DriveSystem{
     void setSpeed(int s);
 
     // these methods make the motors actually move
+
     void backward();
     void turnL();
     void turnR();
