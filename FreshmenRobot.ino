@@ -11,20 +11,23 @@ DriveSystem ds;
 unsigned long startTime;
 
 void correct(){
+  static int prevLTicks = 0;
+  static int prevRTicks = 0;
+
   int lTicks = ds.getLEncoder()->getTicks();
   int rTicks = ds.getREncoder()->getTicks();
 
-  int error = lTicks - rTicks;
-  
-  /*
-  // more left
-  if (error > 0) {}
-  // more right
-  if (error < 0) {}
-  */
+  int dL = lTicks - prevLTicks;
+  int dR = rTicks - prevRTicks;
 
-  float correctionDamping = 0.1;
-  float correction = (float)error * correctionDamping;
+  int absoluteError = lTicks - rTicks;
+  int deltaError = dL - dR;
+
+  float correctionDamping = 0.4;
+  float correction = (
+    (float)deltaError * correctionDamping +
+    (float)absoluteError * correctionDamping
+  );
 
   int spd = ds.getBaseSpeed();
   ds.setSpeed(
