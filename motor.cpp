@@ -14,9 +14,14 @@ void Motor::begin(Adafruit_MotorShield &AFMS, int port){
     Serial.println(port);
 }
 
-void Motor::setSpeed(int speed){
-    motor->setSpeed(speed);
+void Motor::setSpeed(int s){
+    speed = s;
+    motor->setSpeed(s);
 }
+int Motor::getSpeed(){
+    return speed;
+}
+
 void Motor::backward(){
     motor->run(BACKWARD);
 }

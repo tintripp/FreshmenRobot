@@ -11,39 +11,31 @@ DriveSystem ds;
 unsigned long startTime;
 
 void correct(){
-  static int prevLTicks = 0;
-  static int prevRTicks = 0;
+  static int oldL = 0;
+  static int oldR = 0;
+  int l = ds.getLEncoder()->getTicks();
+  int r = ds.getREncoder()->getTicks();
 
-  int lTicks = ds.getLEncoder()->getTicks();
-  int rTicks = ds.getREncoder()->getTicks();
+  int deltaL = l - oldL;
+  int deltaR = r - oldR;
+  int error = deltaR - deltaL;
 
-  int dL = lTicks - prevLTicks;
-  int dR = rTicks - prevRTicks;
+  float damping = 0.5;
+  float correction = (float)error * damping;
 
-  int absoluteError = lTicks - rTicks;
-  int deltaError = dL - dR;
-
-  float correctionDamping = 0.4;
-  float correction = (
-    (float)deltaError * correctionDamping +
-    (float)absoluteError * correctionDamping
-  );
-
-  int spd = ds.getBaseSpeed();
+  int base = ds.getBaseSpeed();
   ds.setSpeed(
-    spd + correction,
-    spd - correction 
+    base + correction,
+    base - correction 
   );
+
+  oldL = l;
+  oldR = r;
 }
 
 void setup(){
   Serial.begin(115200);
 	//while (!Serial) delay(1);
-
-  startTime = millis();
-
-  Serial.println("Waiting 5 Seconds...");
-  delay(5000);
 
   ds.begin(
     L_MOTOR, R_MOTOR,
@@ -52,14 +44,27 @@ void setup(){
   );
   Serial.println("Begin");
 
+  Serial.println("Waiting 5 Seconds...");
+  delay(5000);
+  Serial.println("Done Waiting");
+
+  startTime = millis();
+
   ds.setBaseSpeed(100);
   ds.forward();
 }
 
 void loop(){
   // stop after 5 seconds
-  if (millis() - startTime > 5000) return;
+  if (millis() - startTime > 5000) {
+    ds.release();
+    return;
+  }
 
   correct();
+
+  // this didn't work when i updated less frequently
+  // for some reason, 16 ms delay didn't work but 5 does.
+  delay(5);
 
 }
